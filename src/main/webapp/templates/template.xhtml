@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ds="http://deltaspike.apache.org/jsf" xmlns:p="http://primefaces.org/ui">
+<ui:insert name="pageMetadata">
+</ui:insert>
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8"/>
+</h:head>
+<h:body>
+    <p:layout style="min-width:400px;min-height:400px;">
+        <p:layoutUnit position="west" resizable="true" size="400" minSize="40" maxSize="600">
+            <h:form>
+                <p:menu model="#{menuModelProvider.menuModel}"/>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center">
+            <ui:insert name="content"/>
+        </p:layoutUnit>
+    </p:layout>
+
+    <p:messages showSummary="false" showDetail="true"/>
+    <ds:windowId/>
+</h:body>
+</html>
