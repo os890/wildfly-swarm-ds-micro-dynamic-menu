@@ -30,7 +30,7 @@
     <version>1.0.0</version>
 
     <properties>
-        <ds.version>1.8.2-SNAPSHOT</ds.version>
+        <ds.version>1.8.1</ds.version>
         <wildfly-swarm.version>2017.11.0</wildfly-swarm.version>
         <wildfly-swarm-ee.version>2017.11.0</wildfly-swarm-ee.version>
 

@@ -13,5 +13,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface MenuEntry {
-    int pos();
+    int pos() default -1 /*default-value not needed with v1.8.2+*/;
 }
