@@ -1,19 +1,26 @@
 package org.os890.pf;
 
+import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.core.api.scope.WindowScoped;
 import org.apache.deltaspike.jsf.api.config.view.View;
+import org.os890.ds.Labels;
 import org.os890.ds.MenuEntry;
-import org.os890.ds.Pages;
-import org.primefaces.model.menu.*;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Named
 @WindowScoped
@@ -22,6 +29,9 @@ public class MenuModelProvider implements Serializable {
 
     @Inject
     private ViewConfigResolver viewConfigResolver;
+
+    @Inject
+    private Labels labels;
 
     @PostConstruct
     protected void initMenu() {
@@ -38,7 +48,8 @@ public class MenuModelProvider implements Serializable {
         sections.sort(Comparator.comparingInt(cd -> cd.getConfigClass().getAnnotation(MenuEntry.class).pos()));
 
         for (ConfigDescriptor<?> configDescriptor : sections) {
-            DefaultSubMenu subMenu = new DefaultSubMenu(configDescriptor.getConfigClass().getSimpleName());
+            String label = labels.getSectionLabel(configDescriptor.getConfigClass());
+            DefaultSubMenu subMenu = new DefaultSubMenu(label);
             subMenu.setExpanded(true);
 
             addItems(allConfigDescriptors, subMenu, configDescriptor);
@@ -64,7 +75,10 @@ public class MenuModelProvider implements Serializable {
         subMenuItems.sort(Comparator.comparingInt(cd -> cd.getConfigClass().getAnnotation(MenuEntry.class).pos()));
 
         for (ViewConfigDescriptor menuItemDescriptor : subMenuItems) {
-            DefaultMenuItem menuItem = new DefaultMenuItem(menuItemDescriptor.getConfigClass().getSimpleName());
+            Class<? extends ViewConfig> subMenuConfig = menuItemDescriptor.getConfigClass();
+            String label = labels.getSubMenuLabel(parentConfigDescriptor.getConfigClass(), subMenuConfig);
+
+            DefaultMenuItem menuItem = new DefaultMenuItem(label);
             menuItem.setAjax(false);
             menuItem.setOutcome(menuItemDescriptor.getViewId());
             menuItem.setDisableClientWindow(false);
